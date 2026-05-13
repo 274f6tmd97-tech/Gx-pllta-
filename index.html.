@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Galaxia Romántica</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Poppins', cursive;
+      color: white;
+      text-align: center;
+    }
+    #mensajes {
+      position: absolute;
+      top: 10%;
+      width: 100%;
+      text-shadow: 0 0 10px #ff99ff, 0 0 20px #ff66cc;
+    }
+    h1, p { margin: 10px 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <div id="mensajes">
+    <h1>💕 No deje de sonreír 💕</h1>
+    <p>💜 Usted tiene un propósito 🌸 Me encanta demasiado ❤️</p>
+    <p>💖 Me encanta su sonrisa 🌼 Adoro sus ojitos 💕</p>
+    <p>💗 Me encanta usted mi pollita 🌹</p>
+    <p>💞 Para mí es una bendición que haya aparecido en mi vida 💫</p>
+    <p>✨ Tomara que esses lindos olhos ternos me vejam um dia ✨</p>
+    <p>🙏 Que Deus tenha guardado para nós um momento em que nossos caminhos se cruzem 💞</p>
+    <p>💖🌹💋 Um beijo e um abraço, preciosa 💖🌹💋</p>
+  </div>
+  <canvas id="galaxia"></canvas>
+  <script>
+    const canvas = document.getElementById('galaxia');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let estrellas = [];
+    for(let i=0; i<200; i++){
+      estrellas.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        r: Math.random()*2,
+        dx: (Math.random()-0.5)*0.5,
+        dy: (Math.random()-0.5)*0.5
+      });
+    }
+
+    function dibujar(){
+      ctx.fillStyle = "rgba(20,0,40,0.3)";
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+
+      for(let e of estrellas){
+        ctx.beginPath();
+        ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
+        ctx.fillStyle = "rgba(255,200,255,0.8)";
+        ctx.fill();
+        e.x += e.dx;
+        e.y += e.dy;
+        if(e.x<0) e.x=canvas.width;
+        if(e.x>canvas.width) e.x=0;
+        if(e.y<0) e.y=canvas.height;
+        if(e.y>canvas.height) e.y=0;
+      }
+    }
+
+    // Estrella fugaz
+    let fugaz = {x:-100,y:100,dx:8,dy:2,active:true};
+    function estrellaFugaz(){
+      if(fugaz.active){
+        ctx.beginPath();
+        ctx.moveTo(fugaz.x,fugaz.y);
+        ctx.lineTo(fugaz.x-80,fugaz.y-20);
+        ctx.strokeStyle="white";
+        ctx.lineWidth=2;
+        ctx.stroke();
+        fugaz.x+=fugaz.dx;
+        fugaz.y+=fugaz.dy;
+        if(fugaz.x>canvas.width+100) fugaz={x:-100,y:Math.random()*canvas.height/2,dx:8,dy:2,active:true};
+      }
+    }
+
+    function animar(){
+      dibujar();
+      estrellaFugaz();
+      requestAnimationFrame(animar);
+    }
+    animar();
+
+    window.onresize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+  </script>
+</body>
+</html>
+
